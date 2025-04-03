@@ -144,10 +144,7 @@
     // Extract problem number from URL
     const pathMatch = window.location.pathname.match(/\/problems\/([^\/]+)/);
     const problemSlug = pathMatch ? pathMatch[1] : '';
-    const problemNumber = document.querySelector('[data-cy="question-title"] .font-medium')?.textContent.trim() || '';
-
     console.log('Problem slug:', problemSlug);
-    console.log('Problem number:', problemNumber);
 
     // Try to get the latest accepted solution code with proper line breaks
     let code = '';
@@ -209,18 +206,11 @@
       return;
     }
 
-    if (!problemTitle && !problemNumber) {
-      console.error('Could not identify problem');
-      showNotification('Could not identify problem', 'error');
-      return;
-    }
-
     // Send to background script for GitHub upload
     console.log('Sending data to background script');
     chrome.runtime.sendMessage({
       action: 'pushToGithub',
       data: {
-        problemNumber: problemNumber || 'unknown',
         problemTitle: problemTitle || problemSlug,
         code,
         language
