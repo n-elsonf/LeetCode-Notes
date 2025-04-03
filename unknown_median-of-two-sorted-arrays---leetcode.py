@@ -1,3 +1,6 @@
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        # we run binary search on the smaller array to create a left partition from both nums1 and nums2
         # by creating left partitions we are able to figure out the right partitions, but we then need to check
         # if creating the left partition of the merged array is valid by checking the leftmost values of the each left
         # partition to leq than the first value of the right partition of the OPPOSITE array (LM of left partition nums1 <= 1st elm of right
@@ -42,7 +45,3 @@
                 l = i + 1
             
 
-
-class Solution:
-    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
-        # we run binary search on the smaller array to create a left partition from both nums1 and nums2
