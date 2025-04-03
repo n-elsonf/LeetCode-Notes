@@ -1,1 +1,3 @@
-        dct = {} # dictionary where key represents the number from the current iterated i in nums and value is the index needed to add to the target    def twoSum(self, nums: List[int], target: int) -> List[int]:class Solution:
+            if compliment in dct:
+                return [i, dct[compliment]]
+            dct[num] = i
