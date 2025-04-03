@@ -1,12 +1,12 @@
-·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌compliment·‌=·‌target·‌-·‌num
-
-·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌num·‌=·‌nums[i]
-·‌·‌·‌·‌·‌·‌·‌·‌for·‌i·‌in·‌range(len(nums)):
-
-·‌·‌·‌·‌·‌·‌·‌·‌#·‌if·‌there·‌is·‌a·‌complimentary·‌number·‌that·‌exists·‌within·‌nums·‌return·‌that·‌index·‌i·‌and·‌the·‌key.
-·‌·‌·‌·‌·‌·‌·‌·‌dct·‌=·‌{}·‌#·‌dictionary·‌where·‌key·‌represents·‌the·‌number·‌from·‌the·‌current·‌iterated·‌i·‌in·‌nums·‌and·‌value·‌is·‌the·‌index·‌needed·‌to·‌add·‌to·‌the·‌target
-·‌·‌·‌·‌def·‌twoSum(self,·‌nums:·‌List[int],·‌target:·‌int)·‌->·‌List[int]:
-·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌if·‌compliment·‌in·‌dct:
-·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌·‌return·‌[i,·‌dct[compliment]]
-            dct[num] = i
-class·‌Solution:
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        st = set()
+        l=0
+        res=0
+        for r in range(len(s)):
+            while s[r] in st:
+                st.remove(s[l])
+                l+=1
+            st.add(s[r])
+            res=max(res,r-l+1)
+        return res
