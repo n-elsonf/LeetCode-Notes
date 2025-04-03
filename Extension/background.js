@@ -17,25 +17,28 @@ async function pushSolutionToGithub(data) {
       return;
     }
 
-    const { problemNumber, problemTitle, code } = data;
+    const { problemNumber, problemTitle } = data;
+
+    // Clean the code before processing - fixes Unicode whitespace issues
+    const cleanedCode = cleanCode(data.code);
 
     // Get file extension based on language
     const fileExtension = getFileExtension(data.language || settings.language);
 
-    // Create sanitized filename - now without the problem number
+    // Create sanitized filename
     const sanitizedTitle = problemTitle.replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').toLowerCase();
-    const fileName = `${sanitizedTitle}.${fileExtension}`;
+    const fileName = `${problemNumber}_${sanitizedTitle}.${fileExtension}`;
 
-    // Create commit message - still keeping the problem number in the commit message for reference
+    // Create commit message
     const commitMessage = `Add solution for ${problemNumber}: ${problemTitle}`;
 
     // Check if file already exists to determine if we're creating or updating
     const fileExists = await checkFileExists(settings, fileName);
 
     if (fileExists) {
-      await updateFile(settings, fileName, code, commitMessage);
+      await updateFile(settings, fileName, cleanedCode, commitMessage);
     } else {
-      await createFile(settings, fileName, code, commitMessage);
+      await createFile(settings, fileName, cleanedCode, commitMessage);
     }
 
     showNotification(`Successfully pushed solution to GitHub!`);
@@ -43,6 +46,30 @@ async function pushSolutionToGithub(data) {
     console.error('Error pushing to GitHub:', error);
     showNotification(`Error: ${error.message}`);
   }
+}
+
+/**
+ * Cleans code by removing problematic whitespace characters
+ * @param {string} code - The code to clean
+ * @returns {string} - Cleaned code
+ */
+function cleanCode(code) {
+  if (!code) return '';
+
+  // Replace non-breaking spaces and other problematic whitespace
+  const problematicWhitespace = [
+    '\u00A0', // Non-breaking space
+    '\u2000', '\u2001', '\u2002', '\u2003', '\u2004',
+    '\u2005', '\u2006', '\u2007', '\u2008', '\u2009',
+    '\u200A', '\u200B', '\u202F', '\u205F', '\u3000', '\uFEFF'
+  ];
+
+  let cleanedCode = code;
+  problematicWhitespace.forEach(char => {
+    cleanedCode = cleanedCode.replace(new RegExp(char, 'g'), ' ');
+  });
+
+  return cleanedCode;
 }
 
 function getFileExtension(language) {
