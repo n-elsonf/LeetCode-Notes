@@ -1,1 +1,1 @@
-            dct[num] = i
+        for i in range(len(nums)):            num = nums[i]            compliment = target - num            if compliment in dct:                return [i, dct[compliment]]            dct[num] = i
